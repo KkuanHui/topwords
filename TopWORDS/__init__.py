@@ -1,7 +1,36 @@
+from . import dictionary
+from . import preprocessing
 
 
+"""
+Because of TopWORDS involving EM algorithm that require tune paracmeter, it can only be implemented in class.
+"""
+class TopWORDS:
+    def __init__(self, corpus, taul, tauf, useprob, itertime, convergethld):
+        self.corpus = corpus
+        self.taul = taul
+        self.tauf = tauf
+        self.useprob = useprob
+        self.itertime = itertime
+        self.convergethld = convergethld
 
-
+    def run(self):
+        # 1. preprocess corpus
+        text = preprocessing.preprocessing(self.corpus)
+        # 2. build initial dictionary
+        word_ls = dictionary.cut_words(text, self.taul)
+        dict_0 = dictionary.overcomplete_dictionary(word_ls, self.tauf, self.useprob)
+        # 3. start EM
+        converge = False
+        lastlikelihood = -1.0
+        iterconut = 0
+        while(!converge or itertime == iterconut):
+            converge = False
+            # 3.1 update theta
+            # 3.2 prune dict_0 to dict_1
+            # 3.3 compare lastlikelihood with likelihood
+            # 3.4 set flag then end
+        # 4. segment corpus
 
 
 
