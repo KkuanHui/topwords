@@ -1,5 +1,7 @@
 from . import dictionary
 from . import preprocessing
+from . import dplikelihood
+from . import updatetheta
 
 
 """

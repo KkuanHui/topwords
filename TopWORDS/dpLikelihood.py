@@ -15,6 +15,7 @@ def forward_dplikelihood(sentence, dict_0, taul):
             word = sentence[m: m+j]
             if(word in dict_0.keys()):
                 likelihood[m+j] = likelihood[m] * dict_0[word]
+    return likelihood
                 
 
 def backward_dplikelihood(sentence, dict_0, taul):
@@ -29,3 +30,4 @@ def backward_dplikelihood(sentence, dict_0, taul):
             word = sentence[m-j, m]
             if(word in dict_0.keys()):
                 likelihood[m-j] = likelihood[m] * dict_0[word]
+    return likelihood
