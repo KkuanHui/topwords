@@ -28,6 +28,11 @@ def overcomplete_dictionary(word_ls, tauf, useprob):
     sum_theta = sum(dict_0.values())
     dict_0 = [k: (v/sum_theta) for k, v in dict_0.items]
     # prune by reletive probability
-    dict_0 = [k: v for k, v in dict_0.items if len(k)==1 or v >= useprob]
-    sum_theta = sum(dict_0.values())
-    dict_0 = [k: (v/sum_theta) for k, v in dict_0.items]
+    dict_0 = prune_dictionary_prob(dict_0)
+    return dict_0
+
+def prune_dictionary_prob(dictionary):
+    dictionary = [k: v for k, v in dictionary.items if len(k)==1 or v >= useprob]
+    sum_theta = sum(dictionary.values())
+    dictionary = [k: (v/sum_theta) for k, v in dictionary.items]
+    return dictionary
