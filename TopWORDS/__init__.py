@@ -8,13 +8,14 @@ from . import updatetheta
 Because of TopWORDS involving EM algorithm that require tune paracmeter, it can only be implemented in class.
 """
 class TopWORDS:
-    def __init__(self, corpus, taul, tauf, useprob, itertime, convergethld):
+    def __init__(self, corpus, taul, tauf, useprob, itertime, convergethld, segmentthld):
         self.corpus = corpus
         self.taul = taul
         self.tauf = tauf
         self.useprob = useprob
         self.itertime = itertime
         self.convergethld = convergethld
+        self.segmentthld = segmentthld
 
     def run(self):
         # 1. preprocess corpus
@@ -43,7 +44,12 @@ class TopWORDS:
             iterconut += 1
             dict_0 = dict_1
         # 4. segment corpus
-
+        for sentence in text:
+            back_dpl = dplikelihood.backward_dplikelihood(sentence, dict_1, self.taul)
+            for_dpl =  dplikelihood.forward_dplikelihood(sentence, dict_1, self.taul)
+            for m in range(len(sentence)):
+                if back_dpl[m] * for_dpl[m] > self.segmentthld:
+                    #segment sentence at place m
 
 
 
