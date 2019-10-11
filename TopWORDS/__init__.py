@@ -2,6 +2,7 @@ from . import dictionary
 from . import preprocessing
 from . import dplikelihood
 from . import updatetheta
+from . import segment
 
 from . import *
 
@@ -23,8 +24,8 @@ class TopWORDS:
         # 1. preprocess corpus
         self.text = preprocessing.preprocessing(self.corpus)
         # 2. build initial dictionary
-        dict_0 = dictionary.dictionary()
-        dict_0.initial_dict(self.text, self.taul, self.tauf, self.useprob) 
+        self.dict_0 = dictionary.dictionary()
+        self.dict_0.initial_dict(self.text, self.taul, self.tauf, self.useprob) 
         # 3. start EM
         converge = False
         lastlikelihood = -1.0
@@ -41,18 +42,15 @@ class TopWORDS:
                 converge = True
             lastlikelihood = newlikelihood
             iterconut += 1
-            dict_0 = dict_1
-        # result dictionary is dict_0
+            self.dict_0 = dict_1
+        # result dictionary is still dict_0
         # 4. segment corpus
+        self.result_text = []
         for sentence in self.text:
-            back_dpl = dplikelihood.backward_dplikelihood(sentence, dict_0, self.taul)
-            for_dpl  =  dplikelihood.forward_dplikelihood(sentence, dict_0, self.taul)
-            for m in range(len(sentence)):
-                if back_dpl[m] * for_dpl[m] > self.segmentthld:
-                    #segment sentence at place m
-
-
-
+            back_dpl = dplikelihood.backward_dplikelihood(sentence, self.dict_0, self.taul)
+            for_dpl  =  dplikelihood.forward_dplikelihood(sentence, self.dict_0, self.taul)
+            result = segment.segment(sentence, self.segmentthld, for_dpl, back_dpl)
+            self.result_text += [result]
 
 
 if __name__ == "__main__":
