@@ -1,38 +1,37 @@
 
-
 """
 Build initial dictionary
 """
 from collections import Counter
 
-def cut_words(text, taul):
-    word_ls = []
-    for sentence in text:
-        for m in range(len(sentence)-1):
-            if m+taul >= len(sentence):
-                tlimit = len(sentence)-m
-            else:
-                tlimit = taul
-            for j in range(len(taul)):
-                word = sentence[m:m+j]
-                word_ls.append(word)
-    return word_ls
 
+class dictionary:
+    def __init__(self):
+        self._dict = {}
 
-"""
-Dictionary contains words and its relevent theta.
-"""
-def overcomplete_dictionary(word_ls, tauf, useprob):
-    # prune by appearence times
-    dict_0 = [k: v for k, v in Counter(word_ls).items if len(k) == 1 or v >= tauf]
-    sum_theta = sum(dict_0.values())
-    dict_0 = [k: (v/sum_theta) for k, v in dict_0.items]
-    # prune by reletive probability
-    dict_0 = prune_dictionary_prob(dict_0)
-    return dict_0
+    def initial_dict(self, text, taul, tauf, useprob):
+        word_ls = []
+        for sentence in text:
+            for m in range(len(sentence)-1):
+                if m+taul >= len(sentence):
+                    tlimit = len(sentence)-m
+                else:
+                    tlimit = taul
+                for j in range(len(taul)):
+                    word = sentence[m:m+j]
+                    word_ls.append(word)
+        # prune by appearence times
+        self._dict = [k: v for k, v in Counter(word_ls).items if len(k) == 1 or v >= tauf]
+        sum_theta = sum(self._dict.values())
+        self._dict = [k: (v/sum_theta) for k, v in self._dict.items()]
+        # prune by reletive probability
+        self._dict = prune_dictionary_prob(self._dict)
 
-def prune_dictionary_prob(dictionary):
-    dictionary = [k: v for k, v in dictionary.items if len(k)==1 or v >= useprob]
-    sum_theta = sum(dictionary.values())
-    dictionary = [k: (v/sum_theta) for k, v in dictionary.items]
-    return dictionary
+    def prune_dictionary_prob(self, useprob):
+        self._dict = [k: v for k, v in self._dict.items() if len(k)==1 or v >= useprob]
+        sum_theta = sum(self._dict.values())
+        self._dict = [k: (v/sum_theta) for k, v in self._dict.items()]
+
+    def normalize_dictionary(self):
+        total = sum(self._dict.values())
+        self._dict = {k: v/total for k, v in self._dict}

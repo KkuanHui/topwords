@@ -3,6 +3,8 @@ from . import preprocessing
 from . import dplikelihood
 from . import updatetheta
 
+from . import *
+
 
 """
 Because of TopWORDS involving EM algorithm that require tune paracmeter, it can only be implemented in class.
@@ -19,34 +21,32 @@ class TopWORDS:
 
     def run(self):
         # 1. preprocess corpus
-        text = preprocessing.preprocessing(self.corpus)
+        self.text = preprocessing.preprocessing(self.corpus)
         # 2. build initial dictionary
-        word_ls = dictionary.cut_words(text, self.taul)
-        dict_0 = dictionary.overcomplete_dictionary(word_ls, self.tauf, self.useprob)
+        dict_0 = dictionary.dictionary()
+        dict_0.initial_dict(self.text, self.taul, self.tauf, self.useprob) 
         # 3. start EM
         converge = False
         lastlikelihood = -1.0
         iterconut = 0
-        while(!converge or itertime == iterconut):
-            converge = False
-            # 3.1 update theta
-            dict_1 = updatetheta(text, self.taul, dict_0)
-            # 3.2 prune dict_1
-            dict_1 = dictionary.prune_dictionary_prob(dict_1)
-            # 3.3 compare lastlikelihood with likelihood
-            
+        # the loop
+        while(!converge or self.itertime == iterconut):
+            # 3.1 make a updated and pruned new dictionary dict_1
+            dict_1 = updatetheta(self.text, self.taul, dict_0)
+            # 3.2 compare lastlikelihood with likelihood
             newlikelihood = 0
             for sentence in text:
-                newlikelihood += dplikelihood.backward_dplikelihood(dict_0)
+                newlikelihood += dplikelihood.backward_dplikelihood(dict_0._dict)
             if lastlikelihood/newlikelihood < convergethld and iterconut != 0:
                 converge = True
             lastlikelihood = newlikelihood
             iterconut += 1
             dict_0 = dict_1
+        # result dictionary is dict_0
         # 4. segment corpus
-        for sentence in text:
-            back_dpl = dplikelihood.backward_dplikelihood(sentence, dict_1, self.taul)
-            for_dpl =  dplikelihood.forward_dplikelihood(sentence, dict_1, self.taul)
+        for sentence in self.text:
+            back_dpl = dplikelihood.backward_dplikelihood(sentence, dict_0, self.taul)
+            for_dpl  =  dplikelihood.forward_dplikelihood(sentence, dict_0, self.taul)
             for m in range(len(sentence)):
                 if back_dpl[m] * for_dpl[m] > self.segmentthld:
                     #segment sentence at place m
