@@ -21,16 +21,16 @@ class dictionary:
                     word = sentence[m:m+j]
                     word_ls.append(word)
         # prune by appearence times
-        self._dict = [k: v for k, v in Counter(word_ls).items if len(k) == 1 or v >= tauf]
+        self._dict = {k: v for k, v in Counter(word_ls).items if len(k) == 1 or v >= tauf}
         sum_theta = sum(self._dict.values())
-        self._dict = [k: (v/sum_theta) for k, v in self._dict.items()]
+        self._dict = {k: (v/sum_theta) for k, v in self._dict.items()}
         # prune by reletive probability
         self._dict = prune_dictionary_prob(self._dict)
 
     def prune_dictionary_prob(self, useprob):
-        self._dict = [k: v for k, v in self._dict.items() if len(k)==1 or v >= useprob]
+        self._dict = {k: v for k, v in self._dict.items() if len(k)==1 or v >= useprob}
         sum_theta = sum(self._dict.values())
-        self._dict = [k: (v/sum_theta) for k, v in self._dict.items()]
+        self._dict = {k: (v/sum_theta) for k, v in self._dict.items()}
 
     def normalize_dictionary(self):
         total = sum(self._dict.values())

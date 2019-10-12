@@ -1,17 +1,19 @@
+
 from . import dictionary
-from . import preprocessing
+from . import dpcache
 from . import dplikelihood
-from . import updatetheta
+from . import excorpus_sos
+from . import limitstack
+from . import preprocessing
 from . import segment
-
-from . import *
-
+from . import tlimit
+from . import updatetheta
 
 """
 Because of TopWORDS involving EM algorithm that require tune paracmeter, it can only be implemented in class.
 """
 class TopWORDS:
-    def __init__(self, corpus, taul, tauf, useprob, itertime, convergethld, segmentthld):
+    def __init__(self, corpus, taul = 10, tauf = 5, useprob = 1E-8, itertime = 10, convergethld = 1E-3, segmentthld = 0.0):
         self.corpus = corpus
         self.taul = taul
         self.tauf = tauf
@@ -31,7 +33,7 @@ class TopWORDS:
         lastlikelihood = -1.0
         iterconut = 0
         # the loop
-        while(!converge or self.itertime == iterconut):
+        while(not converge or self.itertime != iterconut):
             # 3.1 make a updated and pruned new dictionary dict_1
             dict_1 = updatetheta(self.text, self.taul, dict_0)
             # 3.2 compare lastlikelihood with likelihood
@@ -52,8 +54,3 @@ class TopWORDS:
             result = segment.segment(sentence, self.segmentthld, for_dpl, back_dpl)
             self.result_text += [result]
 
-
-if __name__ == "__main__":
-    corpus = """
-    超人出生於克利普頓星，親生父母為他命名凱艾爾；在克利普頓星爆炸前，還是嬰兒的凱·艾爾被身為科學家的父親喬艾爾用太空船送往地球。超人是一個超級英雄，超級英雄的工作是救人、救地球、救世界。超人的名字為艾爾，全名為凱艾爾，他的地球名字為克拉克，超人來自於克利普頓星，他的父母親都是克利普頓人的高層官員，在政府的高層進行行政工作，從而了解到克利普頓星的滅亡在即，超人的父母親將幼兒時期的超人放進太空船中送往地球來。
-    """

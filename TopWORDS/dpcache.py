@@ -23,4 +23,4 @@ class dpcache:
                     value = item[2] * (self.cache[item[0]].get(j-1))
                     self.cache[item[0]].push(value)
     def top(self):
-        return {k:v for k, v.get(0) in self.cache.items()}
+        return {k : v.get(0) for k, v in self.cache.items()}
