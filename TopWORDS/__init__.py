@@ -35,7 +35,7 @@ class TopWORDS:
         # the loop
         while(not converge or self.itertime != iterconut):
             # 3.1 make a updated and pruned new dictionary dict_1
-            dict_1 = updatetheta(self.text, self.taul, dict_0)
+            dict_1 = updatetheta.updatetheta(self.text, self.taul, self.dict_0)
             # 3.2 compare lastlikelihood with likelihood
             newlikelihood = 0
             for sentence in text:
@@ -53,4 +53,14 @@ class TopWORDS:
             for_dpl  =  dplikelihood.forward_dplikelihood(sentence, self.dict_0, self.taul)
             result = segment.segment(sentence, self.segmentthld, for_dpl, back_dpl)
             self.result_text += [result]
+"excorpus_sos.sos"
+
+if __name__ == "__main__":
+    a = excorpus_sos.sos
+    TW = TopWORDS(a)
+    TW.run()
+
+
+
+
 

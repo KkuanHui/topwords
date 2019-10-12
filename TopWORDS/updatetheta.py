@@ -17,13 +17,13 @@ def updatetheta(text, taul, dict_0):
     nj_T = dc.dpcache()
     for sentence in text:
         backward_likelihood = dl.backward_dplikelihood(sentence, dict_0, taul)
-        for m in range(reversed(len(sentence))):
+        for m in reversed(range(len(sentence))):
             tlimit = tl.backwardtlimit(sentence, m, taul)
             cuttings = []
             # cuttings = [(word, j, rho)]
-            for j in tlimit:
+            for j in range(tlimit):
                 word = sentence[m: m+j]
-                if word in dict_0.keys(): rho = (dict_0[word] * backward_likelihood[m+j])/ backward_likelihood[m]
+                if word in dict_0._dict.keys(): rho = (dict_0._dict[word] * backward_likelihood[m+j])/ backward_likelihood[m]
                 else: rho = 0
                 cuttings += [(word, j, rho)]
             # compute dp nj_T

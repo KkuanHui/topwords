@@ -17,10 +17,10 @@ class dpcache:
         for item in cuttings:
             for word_i in self.cache.keys():
                 if item[0] == word_i:
-                    value = item[2] * (1 + self.cache[item[0]].get(j-1))
+                    value = item[2] * (1 + self.cache[item[0]].get(item[1]-1))
                     self.cache[item[0]].push(value) 
                 else:
-                    value = item[2] * (self.cache[item[0]].get(j-1))
+                    value = item[2] * (self.cache[item[0]].get(item[1]-1))
                     self.cache[item[0]].push(value)
     def top(self):
         return {k : v.get(0) for k, v in self.cache.items()}

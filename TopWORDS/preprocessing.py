@@ -1,5 +1,6 @@
 
 
+import re
 """
 Preprocess original corpus.
 Segment target chinese corpus into sentences by punchuation or non chinese words.

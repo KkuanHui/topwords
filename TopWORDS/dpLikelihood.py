@@ -18,10 +18,10 @@ def forward_dplikelihood(sentence, dict_0, taul):
 def backward_dplikelihood(sentence, dict_0, taul):
     likelihood = [0] * len(sentence)
     likelihood[-1] = 1.0
-    for m in reversed(range(len(sentence-1))):
+    for m in reversed(range(len(sentence)-1)):
         tlimit = tl.backwardtlimit(sentence, m, taul)
-        for j in tlimit:
-            word = sentence[m, m+j]
-            if(word in dict_0.keys()):
-                likelihood[m] += dict_0[word] * likelihood[m+j] 
+        for j in range(tlimit):
+            word = sentence[m:m+j]
+            if(word in dict_0._dict.keys()):
+                likelihood[m] += dict_0._dict[word] * likelihood[m+j] 
     return likelihood
