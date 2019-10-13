@@ -12,7 +12,7 @@ class limitstack:
         self.stack = [init_value] * size
         self.head = size - 1
     def push(self, value):
-        if self.head + 1 >= size: self.head = 0
+        if self.head + 1 >= self.size: self.head = 0
         else: self.head += 1
         self.stack[self.head] = value
     def get(self, idx):
